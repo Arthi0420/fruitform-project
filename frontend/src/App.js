@@ -1,29 +1,46 @@
-import { useState } from "react"
-import axios from "axios"
+import { useState } from "react";
+import axios from "axios";
 
-const App = ()=>{
+const App = () => {
+  const [fname, setFname] = useState("");
+  const [fruits, setFruits] = useState([]);
 
-  const [fname, setfname] = useState("")
+  const handleChange = (event) => {
+    setFname(event.target.value);
+  };
 
- function handlechange(event){
-  setfname(event.target.value)
+  const change = (event) => {
+    event.preventDefault();
+    
+    axios
+      .post("http://localhost:5000/fruitname", { fruitname: fname })
+      .then((response) => {
+        setFruits((prevFruits) => [...prevFruits, fname]);
+        setFname(""); 
+      })
+      
+  };
 
- }
-
-function change(event){
-  event.preventDefault();
-var fruit = axios.post("http://localhost:5000/fruitname", {fruitname: fname} )
-}
-
-  return(
-    <div >
+  return (
+    <div>
       <h1>Fruit Form</h1>
-      <form action="http://localhost:5000/fruitname" method="">
-        <input value={fname} name="fruitname" onChange={handlechange} placeholder="Enter the Fruit Name" />
-        <button onClick={change} >Add Fruit</button>
+      <form onSubmit={change}>
+        <input
+          type="text"
+          value={fname}
+          name="fruitname"
+          onChange={handleChange}
+          placeholder="Enter the Fruit Name"
+        />
+        <button type="submit">Add Fruit</button>
       </form>
-    </div>
-  )
-}
 
-export default App
+      <div>
+        <h3>Fruits List:</h3>
+        <h4>{JSON.stringify(fruits, null, 2)}</h4>
+      </div>
+    </div>
+  );
+};
+
+export default App;

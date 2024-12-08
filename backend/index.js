@@ -15,6 +15,7 @@ app.post("/fruitname", function(req,res){
     if(fruitname){
         fruits.push(fruitname);
         console.log(fruits);
+        res.send(fruits)
     }
     
 })
